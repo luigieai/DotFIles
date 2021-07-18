@@ -1,0 +1,5 @@
+configuration {
+    modi: "drun,window,ssh";
+    theme: "flamingo";
+    combi-modi: "window,drun,ssh";
+}
