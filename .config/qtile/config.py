@@ -129,6 +129,18 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawn("rofi -show drun"),
         desc="Spawn a command using rofi"),
+    
+    #Screenshots
+    Key([], 'Print', lazy.spawn("flameshot gui")),
+    
+    #Audio
+    Key([], "XF86AudioRaiseVolume",
+        lazy.spawn("pulsemixer --change-volume +5 --max-volume 100")),
+    Key([], "XF86AudioLowerVolume",
+        lazy.spawn("pulsemixer --change-volume -5")),
+    Key([], "XF86AudioMute",
+        lazy.spawn("pulsemixer --toggle-mute ")),
+
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -140,7 +152,7 @@ for i in groups:
             desc="Switch to group {}".format(i.name)),
 
         # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=False),
             desc="Switch to & move focused window to group {}".format(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # # mod1 + shift + letter of group = move focused window to group
@@ -254,11 +266,16 @@ def init_widgets_list():
 promptt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
 wl = init_widgets_list()
 
-screens = []
-for screen in range(0, num_screens):
-    screens.append(
-            Screen(top=bar.Bar(widgets=wl, size=30))
-            )
+screens = [
+        Screen(top=bar.Bar(widgets=wl, size=30)),
+        Screen(top=bar.Bar(widgets=init_widgets_list(), size=30))
+        ]
+#for screen in range(0, num_screens):
+#    screens.append(
+#            Screen(top=bar.Bar(widgets=wl, size=30))
+#            )
+
+
 # Drag floating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
@@ -283,6 +300,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='ssh-askpass'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
+    Match(title='V Barrier'), #Barrier
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
