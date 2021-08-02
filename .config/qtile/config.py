@@ -38,6 +38,7 @@ from Xlib import X, display
 from Xlib.ext import randr
 from pprint import pprint
 
+from colors import colors
 
 d = display.Display()
 s = d.screen()
@@ -54,20 +55,6 @@ for output in res['outputs']:
         num_screens += 1
 print("%d screens found!" % (num_screens))
 
-
-#color pallete
-def init_colors():
-    colo = [
-        ["#282c34", "#282c34"], # panel background
-        ["#3d3f4b", "#434758"], # background for current screen tab
-        ["#ffffff", "#ffffff"], # font color for group names
-        ["#ff5555", "#ff5555"], # border line color for current tab
-        ["#74438f", "#74438f"], # border line color for 'other tabs' and color for 'odd widgets'
-        ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
-        ["#e1acff", "#e1acff"], # window name
-        ["#ecbbfb", "#ecbbfb"]  # background for inactive screens
-    ]
-    return colo
 #useful methods
 def window_to_next_screen(qtile):
     i = qtile.screens.index(qtile.current_screen)
@@ -83,7 +70,6 @@ def window_to_previous_screen(qtile):
 #vars
 mod = "mod4"
 terminal = guess_terminal()
-colors = init_colors()
 
 keys = [
     # Switch between windows
@@ -163,8 +149,8 @@ for i in groups:
 layouts = [
     layout.MonadTall(
         border_width = 2,
-        border_focus = colors[3][0],
-        border_normal = colors[4][0],
+        border_focus = colors['rosinha'],
+        border_normal = colors['block-background']
         ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
@@ -181,19 +167,18 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
+    font='Source Code Pro 11',
     fontsize=12,
-    padding=3,
+    padding=4,
+    background = colors['background'],
+    foreground = colors['text']
 )
 extension_defaults = widget_defaults.copy()
-
 def init_widgets_list():
     widgets_list = [
                 widget.Sep(
                     linewidth = 0,
                     padding = 6,
-                    foreground = colors[2],
-                    background = colors[0]
                     ),
                 widget.GroupBox(
                     margin_y = 5,
@@ -201,64 +186,50 @@ def init_widgets_list():
                     padding_y = 5,
                     padding_x = 5,
                     borderwidth = 1,
-                    active = colors[2],
-                    inactive = colors[2],
+                    active = colors['text'],
+                    inactive = colors['text'],
                     rounded = False,
                     highlight_method = "block",
-                    this_current_screen_border = colors[5],
-                    this_screen_border = colors[1],
-                    other_current_screen_border = colors[0],
-                    other_screen_border = colors[0],
-                    foreground = colors[2],
-                    background = colors[0]
-                    ),
-                widget.CurrentLayout(
-                    padding = 10,
-                    background = colors[0],
-                    foreground = colors[2]
-                    ),
-                widget.Prompt(
-                    prompt=promptt,
-                    padding = 10,
-                    foreground = colors[3],
-                    background = colors[0]
+                    this_current_screen_border = colors['block-background'],
+                    this_screen_border = colors['background'],
+                    other_current_screen_border = colors['background'],
+                    other_screen_border = colors['background'],
+                    foreground = colors['text'],
+                    background = colors['background']
                     ),
                 widget.Sep(
-                    linewidth = 0,
-                    padding = 40,
-                    foregruond = colors[2],
-                    background = colors[0],
+                    linewidth = 1,
+                    padding = 10,
                     ),
                 widget.WindowName(
-                    foreground = colors[6],
-                    background = colors[0],
+                    #foreground = colors[6],
+                    #background = colors[0],
                     padding = 0,
                     ),
                 widget.Systray(
-                    background = colors[0],
+                    #background = colors[0],
                     padding = 5
                     ),
-                widget.Notify(
-                    default_timeout = 5,
-                    max_chars = 10,
-                    background = colors[0],
-                    foreground = colors[3],
+                widget.CurrentLayout(
+                    fontsize = 12,
+                    font = 'Source Code Pro 11'
                     ),
                 widget.CPU(
                     padding = 5,
-                    background = colors[0],
-                    foreground = colors[2],
+                    #background = colors[0],
+                    #foreground = colors[2],
                     ),
                 widget.Memory(
-                        padding = 5,
-                        background = colors[0],
-                        foreground = colors[2],
+                    padding = 5,
+                    #background = colors[0],
+                    #foreground = colors[2],
+                    format = '{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
+                    measure_mem = 'G'
                         ),
                 widget.Clock(
-                        fontsize = 12,
-                        foreground = colors[3],
-                        background = colors[0],
-                        format='%I:%M %P | %d/%m/%Y'
+                    #foreground = colors[3],
+                    #background = colors[0],
+                    format='%I:%M %P | %d/%m/%Y'
                         ),
             ]
     return widgets_list
@@ -267,8 +238,8 @@ promptt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
 wl = init_widgets_list()
 
 screens = [
-        Screen(top=bar.Bar(widgets=wl, size=30)),
-        Screen(top=bar.Bar(widgets=init_widgets_list(), size=30))
+        Screen(top=bar.Bar(widgets=wl, size=30,)),
+        Screen(top=bar.Bar(widgets=init_widgets_list(), size=30,))
         ]
 #for screen in range(0, num_screens):
 #    screens.append(

@@ -2,3 +2,4 @@
 lxsession &
 picom &
 pcmanfm -d &
+nitrogen --restore &
