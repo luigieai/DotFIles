@@ -1,4 +1,5 @@
 configuration {
+  theme: "themes/luigi.rasi";
   width: 396;
 	lines: 18;
   columns: 1;
@@ -28,4 +29,5 @@ configuration {
 	color-window: "#081C0F, #081C0F, #081C0F";
   max-history-size: 25;
   kb-cancel: "Escape";
+
 }
