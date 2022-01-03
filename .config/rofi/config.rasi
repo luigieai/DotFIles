@@ -1,5 +1,4 @@
 configuration {
-  theme: "themes/luigi.rasi";
   width: 396;
 	lines: 18;
   columns: 1;
@@ -31,3 +30,4 @@ configuration {
   kb-cancel: "Escape";
 
 }
+@theme "themes/luigi.rasi"
